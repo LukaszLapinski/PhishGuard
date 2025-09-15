@@ -1,0 +1,51 @@
+# Large dataset files (>100MB)
+datasets/engineered/url_features_train.csv
+datasets/engineered/url_features_test.csv
+datasets/engineered/url_features_val.csv
+models/url/url_features_train.csv
+models/url/url_features_test.csv
+
+# Large raw datasets
+datasets/PhiUSIIL_Phishing_URL_Dataset.csv
+datasets/interim_metadata_39000.csv
+datasets/final_url_dataset.csv
+datasets/content_data_cleaned.csv
+datasets/url_data_cleaned.csv
+datasets/metadata_data_cleaned.csv
+
+# Processed data splits (keep structure but ignore large files)
+datasets/split/
+datasets/balanced/metadata_balanced_hybrid_train.csv
+datasets/balanced/metadata_balanced_hybrid_test.csv
+datasets/balanced/metadata_balanced_hybrid_val.csv
+datasets/balanced/metadata_balanced_hybrid.csv
+datasets/processed/metadata_train_scaled.csv
+datasets/processed/metadata_test_scaled.csv
+datasets/processed/metadata_val_scaled.csv
+datasets/processed/metadata_train.csv
+datasets/processed/metadata_test.csv
+datasets/processed/metadata_val.csv
+
+# Trained model files
+models/**/*.pkl
+models/**/*.h5
+models/**/*.pt
+
+# Python cache and environments
+__pycache__/
+*.pyc
+.venv/
+env/
+venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

@@ -1,0 +1,16 @@
+Icons to create:
+
+1. icon16.png (16x16 pixels)
+2. icon48.png (48x48 pixels)
+3. icon128.png (128x128 pixels)
+4. icon16_danger.png (16x16 pixels - red variant)
+5. icon48_danger.png (48x48 pixels - red variant)
+6. icon128_danger.png (128x128 pixels - red variant)
+
+You'll need to create these icons to replace this placeholder file.
+
+Suggested icon design:
+- A shield or shield with a checkmark for the regular icon
+- A shield with an exclamation mark for the danger variant
+- Color scheme: Blue/green for regular, red for danger
+- Simple, recognizable design that works at small sizes 

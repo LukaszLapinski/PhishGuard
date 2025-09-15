@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard Settings</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+      line-height: 1.5;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    h1 img {
+      width: 28px;
+      height: 28px;
+      margin-right: 10px;
+    }
+    
+    h2 {
+      font-size: 18px;
+      margin: 20px 0 10px;
+      color: #444;
+    }
+    
+    .option-group {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    
+    .option {
+      margin-bottom: 15px;
+    }
+    
+    .option:last-child {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    
+    input[type="range"] {
+      width: 100%;
+      margin: 10px 0;
+    }
+    
+    select, input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    button {
+      background: #1a73e8;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    
+    button:hover {
+      background: #1565c0;
+    }
+    
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .reset {
+      background: #f5f5f5;
+      color: #333;
+    }
+    
+    .reset:hover {
+      background: #e0e0e0;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background: #4caf50;
+      color: white;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <img src="../images/icon48.png" alt="PhishGuard Logo">
+    PhishGuard Settings
+  </h1>
+  
+  <p>Configure how PhishGuard protects you from potentially dangerous websites.</p>
+  
+  <div class="option-group">
+    <h2>Detection Settings</h2>
+    
+    <div class="option">
+      <label for="confidence-threshold">Phishing Detection Sensitivity</label>
+      <input type="range" id="confidence-threshold" min="0" max="100" step="5" value="70">
+      <div class="range-labels">
+        <span>More Sensitive</span>
+        <span>Balanced</span>
+        <span>Less Sensitive</span>
+      </div>
+      <p>Adjust how sensitive the detection system should be. More sensitive may give more false positives.</p>
+    </div>
+    
+    <div class="option">
+      <label>
+        <input type="checkbox" id="auto-scan" checked>
+        Automatically scan websites as you browse
+      </label>
+    </div>
+    
+    <div class="option">
+      <label>
+        <input type="checkbox" id="scan-links" checked>
+        Scan links before you click them
+      </label>
+    </div>
+  </div>
+  
+  <div class="option-group">
+    <h2>Notification Settings</h2>
+    
+    <div class="option">
+      <label>
+        <input type="checkbox" id="show-warnings" checked>
+        Show warning banners for dangerous sites
+      </label>
+    </div>
+    
+    <div class="option">
+      <label>
+        <input type="checkbox" id="block-navigation" checked>
+        Block navigation to high-risk phishing sites
+      </label>
+    </div>
+    
+    <div class="option">
+      <label>Warning Display Style</label>
+      <select id="warning-style">
+        <option value="banner">Top banner</option>
+        <option value="modal">Center modal</option>
+        <option value="minimal">Minimal notification</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="option-group">
+    <h2>Advanced Settings</h2>
+    
+    <div class="option">
+      <label>API Endpoint URL (for custom deployment)</label>
+      <input type="text" id="api-url" placeholder="http://localhost:8000/api/v1/check">
+      <p>Leave blank to use the default PhishGuard API.</p>
+    </div>
+    
+    <div class="option">
+      <label>
+        <input type="checkbox" id="enable-cache" checked>
+        Cache results to reduce API calls
+      </label>
+    </div>
+  </div>
+  
+  <div class="buttons">
+    <button id="reset-button" class="reset">Reset to Defaults</button>
+    <button id="save-button">Save Settings</button>
+  </div>
+  
+  <div id="notification" class="notification">Settings saved successfully!</div>
+  
+  <script src="../js/options.js"></script>
+</body>
+</html> 

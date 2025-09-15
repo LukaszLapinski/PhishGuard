@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishGuard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      width: 300px;
+      padding: 15px;
+      margin: 0;
+      color: #333;
+    }
+    
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .logo {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    
+    h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 600;
+    }
+    
+    .status {
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .status-icon {
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    
+    .status-text {
+      flex-grow: 1;
+    }
+    
+    .status-text h2 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+    }
+    
+    .status-text p {
+      margin: 0;
+      font-size: 13px;
+    }
+    
+    .safe {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .danger {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+    
+    .unknown {
+      background-color: #f5f5f5;
+      color: #757575;
+    }
+    
+    .url {
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 5px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    button {
+      padding: 8px 12px;
+      background: #f0f0f0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background: #e0e0e0;
+    }
+    
+    button svg {
+      margin-right: 8px;
+    }
+    
+    .primary-button {
+      background-color: #1a73e8;
+      color: white;
+    }
+    
+    .primary-button:hover {
+      background-color: #1565c0;
+    }
+    
+    .danger-button {
+      background-color: #ff3b30;
+      color: white;
+    }
+    
+    .danger-button:hover {
+      background-color: #d63426;
+    }
+    
+    .confidence {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+    
+    .confidence-title {
+      font-size: 13px;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .confidence-bar {
+      height: 6px;
+      background: #f0f0f0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+    
+    .confidence-fill {
+      height: 100%;
+      background: linear-gradient(to right, #4caf50, #ff3b30);
+    }
+    
+    .confidence-text {
+      text-align: right;
+      font-size: 12px;
+      color: #757575;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+      flex-direction: column;
+    }
+    
+    .loading svg {
+      animation: spin 1s linear infinite;
+      margin-bottom: 10px;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="../images/icon48.png" alt="PhishGuard Logo" class="logo">
+    <h1>PhishGuard</h1>
+  </div>
+  
+  <div id="loading" class="loading">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12" stroke="#757575" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <p>Analyzing current URL...</p>
+  </div>
+  
+  <div id="content" style="display: none;">
+    <div id="url" class="url"></div>
+    
+    <div id="status-safe" class="status safe" style="display: none;">
+      <div class="status-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="#2e7d32"/>
+        </svg>
+      </div>
+      <div class="status-text">
+        <h2>This website appears safe</h2>
+        <p>No phishing indicators detected</p>
+      </div>
+    </div>
+    
+    <div id="status-danger" class="status danger" style="display: none;">
+      <div class="status-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="#c62828"/>
+        </svg>
+      </div>
+      <div class="status-text">
+        <h2>Warning: Potential Phishing Site</h2>
+        <p>This site may be trying to steal your information</p>
+      </div>
+    </div>
+    
+    <div id="status-unknown" class="status unknown" style="display: none;">
+      <div class="status-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 19H11V17H13V19ZM15.07 11.25L14.17 12.17C13.45 12.9 13 13.5 13 15H11V14.5C11 13.4 11.45 12.4 12.17 11.67L13.41 10.41C13.78 10.05 14 9.55 14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9H8C8 6.79 9.79 5 12 5C14.21 5 16 6.79 16 9C16 9.88 15.64 10.68 15.07 11.25Z" fill="#757575"/>
+        </svg>
+      </div>
+      <div class="status-text">
+        <h2>Status Unknown</h2>
+        <p>Unable to analyze this website</p>
+      </div>
+    </div>
+    
+    <div id="confidence" class="confidence" style="display: none;">
+      <div class="confidence-title">Detection Confidence</div>
+      <div class="confidence-bar">
+        <div id="confidence-fill" class="confidence-fill" style="width: 0%;"></div>
+      </div>
+      <div id="confidence-text" class="confidence-text">0%</div>
+    </div>
+    
+    <div class="actions">
+      <button id="scan-button" class="primary-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z" fill="white"/>
+        </svg>
+        Scan Page Again
+      </button>
+      
+      <button id="details-button" style="display: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 19H11V17H13V19ZM15.07 11.25L14.17 12.17C13.45 12.9 13 13.5 13 15H11V14.5C11 13.4 11.45 12.4 12.17 11.67L13.41 10.41C13.78 10.05 14 9.55 14 9C14 7.9 13.1 7 12 7C10.9 7 10 7.9 10 9H8C8 6.79 9.79 5 12 5C14.21 5 16 6.79 16 9C16 9.88 15.64 10.68 15.07 11.25Z" fill="currentColor"/>
+        </svg>
+        View Detection Details
+      </button>
+      
+      <button id="report-button" style="display: none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12.5 7V10.25L15 12.75L14.5 13.25L11.5 10.25V7H12.5ZM11 16V18H13V16H11ZM11 14H13V6H11V14Z" fill="currentColor"/>
+        </svg>
+        Report False Detection
+      </button>
+      
+      <button id="options-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.14 12.94C19.18 12.64 19.2 12.33 19.2 12C19.2 11.68 19.18 11.36 19.13 11.06L21.16 9.48C21.34 9.34 21.39 9.07 21.28 8.87L19.36 5.55C19.25 5.34 18.99 5.26 18.78 5.34L16.36 6.38C15.89 6.02 15.39 5.71 14.85 5.48L14.49 2.9C14.46 2.67 14.25 2.5 14.01 2.5H10.01C9.77 2.5 9.57 2.67 9.54 2.89L9.18 5.47C8.64 5.71 8.14 6.01 7.67 6.38L5.25 5.34C5.04 5.27 4.78 5.34 4.67 5.55L2.75 8.87C2.63 9.08 2.69 9.34 2.87 9.48L4.9 11.06C4.85 11.36 4.83 11.69 4.83 12C4.83 12.31 4.85 12.64 4.9 12.94L2.87 14.52C2.69 14.66 2.64 14.93 2.75 15.13L4.67 18.45C4.78 18.66 5.04 18.74 5.25 18.66L7.67 17.62C8.14 17.98 8.64 18.29 9.18 18.52L9.54 21.1C9.57 21.33 9.77 21.5 10.01 21.5H14.01C14.25 21.5 14.46 21.33 14.49 21.11L14.85 18.53C15.39 18.29 15.89 17.99 16.36 17.62L18.78 18.66C18.99 18.73 19.25 18.66 19.36 18.45L21.28 15.13C21.39 14.92 21.34 14.66 21.16 14.52L19.14 12.94ZM12.01 15.5C10.07 15.5 8.51 13.93 8.51 12C8.51 10.07 10.07 8.5 12.01 8.5C13.94 8.5 15.51 10.07 15.51 12C15.51 13.93 13.94 15.5 12.01 15.5Z" fill="currentColor"/>
+        </svg>
+        Settings
+      </button>
+    </div>
+  </div>
+  
+  <script src="../js/popup.js"></script>
+</body>
+</html> 

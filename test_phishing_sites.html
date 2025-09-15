@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishGuard Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .button {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #1a73e8;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .warning {
+            color: #c62828;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>PhishGuard Extension Test Page</h1>
+    <p>This page contains various types of URLs to test if the PhishGuard extension is correctly identifying potential phishing sites.</p>
+    
+    <div class="test-section">
+        <h2>Known Safe Sites</h2>
+        <p>These sites should be detected as safe:</p>
+        <ul>
+            <li><a href="https://www.google.com" target="_blank">Google</a></li>
+            <li><a href="https://www.microsoft.com" target="_blank">Microsoft</a></li>
+            <li><a href="https://www.apple.com" target="_blank">Apple</a></li>
+            <li><a href="https://www.amazon.com" target="_blank">Amazon</a></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Sites with Suspicious URL Characteristics</h2>
+        <p>These URLs have characteristics often found in phishing sites:</p>
+        <ul>
+            <li><a href="http://tinyurl.com/3exampleonly" target="_blank">TinyURL redirect (short URL)</a></li>
+            <li><a href="http://google-secure-login.com" target="_blank">Brand name with hyphen (fake site)</a></li>
+            <li><a href="http://gooogle.com" target="_blank">Misspelled domain (extra 'o')</a></li>
+            <li><a href="http://secure-bank-login.randomdomain.com" target="_blank">Suspicious subdomain pattern</a></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Manually Test Any URL</h2>
+        <div id="custom-test">
+            <input type="text" id="test-url" placeholder="Enter URL to test" style="width: 70%; padding: 8px;">
+            <button onclick="openInNewTab()" class="button">Test URL</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test API Directly</h2>
+        <p>Click the button below to directly test the API with a set of URLs:</p>
+        <button id="test-api-button" class="button">Run API Tests</button>
+        <div id="api-results" style="margin-top: 15px; padding: 10px; background: #f0f0f0; border-radius: 4px; display: none;">
+            <h3>API Test Results:</h3>
+            <pre id="api-results-content" style="white-space: pre-wrap; overflow-x: auto;"></pre>
+        </div>
+    </div>
+
+    <p class="warning">Note: For academic purposes only. Do not visit actual phishing sites as they may harm your computer or steal information.</p>
+
+    <script>
+        function openInNewTab() {
+            const url = document.getElementById('test-url').value;
+            if (url) {
+                window.open(url, '_blank');
+            } else {
+                alert('Please enter a URL to test');
+            }
+        }
+
+        document.getElementById('test-api-button').addEventListener('click', async function() {
+            const resultsDiv = document.getElementById('api-results');
+            const resultsContent = document.getElementById('api-results-content');
+            resultsDiv.style.display = 'block';
+            resultsContent.textContent = 'Running tests...';
+
+            const urlsToTest = [
+                'https://www.google.com',
+                'http://google-secure-login.com',
+                'http://gooogle.com',
+                'http://secure-bank-login.randomdomain.com'
+            ];
+
+            try {
+                const results = [];
+                for (const url of urlsToTest) {
+                    try {
+                        const response = await fetch('http://localhost:8000/api/v1/check', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ url: url })
+                        });
+
+                        if (!response.ok) {
+                            results.push(`Error for ${url}: ${response.status} ${response.statusText}`);
+                            continue;
+                        }
+
+                        const data = await response.json();
+                        results.push(`${url}:\nIs Phishing: ${data.is_phishing}\nConfidence: ${data.confidence}\n`);
+                    } catch (error) {
+                        results.push(`Error for ${url}: ${error.message}`);
+                    }
+                }
+                resultsContent.textContent = results.join('\n\n');
+            } catch (error) {
+                resultsContent.textContent = `Error running tests: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html> 
