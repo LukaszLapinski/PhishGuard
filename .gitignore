@@ -1,33 +1,30 @@
-# Large dataset files (>100MB)
+# Large dataset files (>30MB) - exclude only the largest files
 datasets/engineered/url_features_train.csv
 datasets/engineered/url_features_test.csv
 datasets/engineered/url_features_val.csv
 models/url/url_features_train.csv
 models/url/url_features_test.csv
 
-# Large raw datasets
+# Large raw datasets (>30MB)
 datasets/PhiUSIIL_Phishing_URL_Dataset.csv
-datasets/interim_metadata_39000.csv
 datasets/final_url_dataset.csv
 datasets/content_data_cleaned.csv
 datasets/url_data_cleaned.csv
-datasets/metadata_data_cleaned.csv
 
-# Processed data splits (keep structure but ignore large files)
-datasets/split/
-datasets/balanced/metadata_balanced_hybrid_train.csv
-datasets/balanced/metadata_balanced_hybrid_test.csv
-datasets/balanced/metadata_balanced_hybrid_val.csv
-datasets/balanced/metadata_balanced_hybrid.csv
-datasets/processed/metadata_train_scaled.csv
-datasets/processed/metadata_test_scaled.csv
-datasets/processed/metadata_val_scaled.csv
-datasets/processed/metadata_train.csv
-datasets/processed/metadata_test.csv
-datasets/processed/metadata_val.csv
+# Large processed datasets
+datasets/split/content_data_train.csv
+datasets/split/content_data_test.csv
+datasets/split/content_data_val.csv
 
-# Trained model files
-models/**/*.pkl
+# Keep smaller files for functionality:
+# - models/url/rf_url_model.pkl (34MB - essential for API)
+# - datasets/balanced/ (1.7MB max - small enough)
+# - datasets/processed/ (3.2MB max - small enough)
+# - datasets/split/url_data_*.csv (7.6MB max - small enough)
+# - datasets/metadata_data_cleaned.csv (2MB - small enough)
+# - datasets/interim_metadata_39000.csv (4.5MB - small enough)
+
+# Other model formats (not used in this project)
 models/**/*.h5
 models/**/*.pt
 
